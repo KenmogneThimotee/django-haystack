@@ -22,6 +22,7 @@ from haystack.models import SearchResult
 from haystack.utils import get_identifier, get_model_ct
 from haystack.utils import log as logging
 from haystack.utils.app_loading import haystack_get_model
+import math
 
 try:
     import elasticsearch
@@ -809,7 +810,7 @@ class ElasticsearchSearchBackend(BaseSearchBackend):
             field_mapping = FIELD_MAPPINGS.get(
                 field_class.field_type, DEFAULT_FIELD_MAPPING
             ).copy()
-            if field_class.boost != 1.0:
+            if not math.isclose(field_class.boost, 1.0, rel_tol=1e-09, abs_tol=0.0):
                 field_mapping["boost"] = field_class.boost
 
             if field_class.document is True:

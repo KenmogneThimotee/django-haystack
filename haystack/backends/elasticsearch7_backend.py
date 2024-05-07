@@ -12,6 +12,7 @@ from haystack.backends.elasticsearch_backend import (
 from haystack.constants import DEFAULT_OPERATOR, DJANGO_CT, DJANGO_ID, FUZZINESS
 from haystack.exceptions import MissingDependency
 from haystack.utils import get_identifier, get_model_ct
+import math
 
 try:
     import elasticsearch
@@ -559,7 +560,7 @@ class Elasticsearch7SearchBackend(ElasticsearchSearchBackend):
             field_mapping = FIELD_MAPPINGS.get(
                 field_class.field_type, DEFAULT_FIELD_MAPPING
             ).copy()
-            if field_class.boost != 1.0:
+            if not math.isclose(field_class.boost, 1.0, rel_tol=1e-09, abs_tol=0.0):
                 field_mapping["boost"] = field_class.boost
 
             if field_class.document is True:
