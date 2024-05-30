@@ -15,8 +15,8 @@ dist_path = "lucene/solr/{0}/{1}".format(solr_version, tarball)
 
 download_url = urljoin("https://archive.apache.org/dist/", dist_path)
 mirror_response = requests.get(
-    "https://www.apache.org/dyn/mirrors/mirrors.cgi/%s?asjson=1" % dist_path
-)
+    "https://www.apache.org/dyn/mirrors/mirrors.cgi/%s?asjson=1" % dist_path, 
+timeout=60)
 
 if not mirror_response.ok:
     print(
@@ -43,7 +43,7 @@ for base_url in chain(
         test_url = urljoin(test_url, dist_path)
 
     try:
-        if requests.head(test_url, allow_redirects=True).status_code == 200:
+        if requests.head(test_url, allow_redirects=True, timeout=60).status_code == 200:
             download_url = test_url
             break
     except requests.exceptions.ConnectionError:
