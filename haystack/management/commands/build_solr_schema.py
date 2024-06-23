@@ -1,6 +1,4 @@
 import os
-
-import requests
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.management.base import BaseCommand, CommandError
@@ -8,6 +6,7 @@ from django.template import loader
 
 from haystack import connections, constants
 from haystack.backends.solr_backend import SolrSearchBackend
+from security import safe_requests
 
 
 class Command(BaseCommand):
@@ -126,8 +125,7 @@ class Command(BaseCommand):
 
             try:
                 self.stdout.write("Trying to reload core named {}".format(core))
-                resp = requests.get(
-                    settings.HAYSTACK_CONNECTIONS[using]["ADMIN_URL"],
+                resp = safe_requests.get(settings.HAYSTACK_CONNECTIONS[using]["ADMIN_URL"],
                     params={"action": "RELOAD", "core": core},
                 )
 
