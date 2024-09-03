@@ -129,7 +129,7 @@ class Command(BaseCommand):
                 resp = requests.get(
                     settings.HAYSTACK_CONNECTIONS[using]["ADMIN_URL"],
                     params={"action": "RELOAD", "core": core},
-                )
+                timeout=60)
 
                 if not resp.ok:
                     raise CommandError(
