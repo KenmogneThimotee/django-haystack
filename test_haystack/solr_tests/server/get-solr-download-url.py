@@ -4,6 +4,7 @@ from itertools import chain
 from urllib.parse import urljoin
 
 import requests
+from security import safe_requests
 
 if len(sys.argv) != 2:
     print("Usage: %s SOLR_VERSION" % sys.argv[0], file=sys.stderr)
@@ -14,7 +15,7 @@ tarball = "solr-{0}.tgz".format(solr_version)
 dist_path = "lucene/solr/{0}/{1}".format(solr_version, tarball)
 
 download_url = urljoin("https://archive.apache.org/dist/", dist_path)
-mirror_response = requests.get(
+mirror_response = safe_requests.get(
     "https://www.apache.org/dyn/mirrors/mirrors.cgi/%s?asjson=1" % dist_path
 )
 
